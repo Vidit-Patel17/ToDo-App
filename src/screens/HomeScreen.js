@@ -1,29 +1,45 @@
-import React, { useState } from 'react';
-import {View,Text,StyleSheet} from 'react-native';
+import React, { useState ,useEffect} from 'react';
+import {View,Text,StyleSheet, FlatList} from 'react-native';
 import TextBar from '../components/textBar';
-
-
+import AsyncStorage  from '@react-native-async-storage/async-storage';
 
 const HomeScreen = () => {
     const [term,setTerm] = useState('');
+    const [ToDo,setTodo] = useState([]);
 
-    const storeTerm = () => {
-        console.log({term});
-    }
+    const addItem = () => {
+        if(term){
+            setTodo([...ToDo,term]);
+            setTerm('');
+        }
+    } 
+
+    useEffect(() => {
+        AsyncStorage.setItem('notes',JSON.stringify({ToDo}))
+        console.log(ToDo)
+    }, [{ToDo}]); 
+
     return <View style= {{flexDirection: 'column'}}>
         <View style = {styles.top} >
             <TextBar
                 term={term}
                 onTermChange={setTerm}
-                onTermSubmit={storeTerm}   //call helper function which adds the text to Notes  
+                onTermSubmit={() => addItem()}   //call helper function which adds the text to Notes  
             />
             <Text>New Todo : {term} </Text>
         </View>
         <View style = {styles.bottom}>
-            <Text>//Different todo lists</Text>
+            <FlatList
+                data={ToDo}
+                renderItem={ ({item}) => {
+                    return <Text>{item}</Text>
+                }}
+            />
         </View>
     </View>
 }
+
+
 
 const styles = StyleSheet.create({
     top:{

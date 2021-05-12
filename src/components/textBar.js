@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginHorizontal: 7,
         marginTop: 10,
-        marginBottom: 10,
+        marginBottom: 10,   
         flexDirection: 'row'
     },
     icon:{
